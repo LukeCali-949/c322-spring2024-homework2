@@ -11,7 +11,9 @@ class InventoryRepositoryTest {
 
     @Test
     void addGuitar() throws IOException {
-        // Test 1
+        // issues found in this test after making new assigned required implementations fixed the rest of the tests basically as well.
+        // fixed things like parameter issues with the new enums and out of bounds erros made cause by my own mistakes when updating code
+        
         InventoryRepository inventoryRepository = new InventoryRepository();
         inventoryRepository.addGuitar(new Guitar("101", 1200.0, Builder.FENDER, "Model1", Type.ACOUSTIC, Wood.MAHOGANY, Wood.CEDAR));
 
@@ -48,6 +50,8 @@ class InventoryRepositoryTest {
         inventoryRepository.addGuitar(new Guitar("103", 1200.0, Builder.GIBSON, "Model1", Type.ACOUSTIC, Wood.MAHOGANY, Wood.CEDAR));
         inventoryRepository.addGuitar(new Guitar("109", 1200.0, Builder.GIBSON, "Model2", Type.ACOUSTIC, Wood.MAHOGANY, Wood.CEDAR));
 
+        // had issues here initially seperate from issues mentioned in comments above. issue was the way the file was being read. 
+        // I ended up using BufferenReader instead of Files. I just use it more and find it easier to read file using it
         Guitar searchGuitar = new Guitar(null, 1200.0, Builder.GIBSON, null, Type.ACOUSTIC, Wood.MAHOGANY, Wood.CEDAR);
         assertEquals(2, inventoryRepository.search(searchGuitar).size());
     }
