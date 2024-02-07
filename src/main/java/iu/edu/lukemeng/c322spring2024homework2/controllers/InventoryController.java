@@ -1,6 +1,6 @@
 package iu.edu.lukemeng.c322spring2024homework2.controllers;
 
-import iu.edu.lukemeng.c322spring2024homework2.model.Guitar;
+import iu.edu.lukemeng.c322spring2024homework2.model.*;
 import iu.edu.lukemeng.c322spring2024homework2.repository.InventoryRepository;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +23,15 @@ public class InventoryController {
                                @RequestParam(required = false) String type,
                                @RequestParam(required = false) String backWood,
                                @RequestParam(required = false) String topWood){
-        try {
-            Guitar guitar = new Guitar(serialNumber, price == null ? 0 : price, builder, model, type, backWood, topWood);
-            return inventoryRepository.search(guitar);
-        } catch (IOException e) {
-            return null;
-        }
+
+        Builder builderEnum = Builder.valueOf(builder.toUpperCase());
+        Type typeEnum = Type.valueOf(type.toUpperCase());
+        Wood backWoodEnum = Wood.valueOf(backWood.toUpperCase());
+        Wood topWoodEnum = Wood.valueOf(topWood.toUpperCase());
+
+        Guitar guitar = new Guitar(serialNumber, price == null ? 0 : price, builderEnum, model, typeEnum, backWoodEnum, topWoodEnum);
+
+        return inventoryRepository.search(guitar);
     }
 
 
