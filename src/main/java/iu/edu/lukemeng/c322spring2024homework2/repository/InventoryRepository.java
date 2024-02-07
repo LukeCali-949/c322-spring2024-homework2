@@ -42,7 +42,7 @@ public class InventoryRepository {
     public Guitar getGuitar(String serialNumber) throws IOException {
         Path path = Paths.get(DATABASE_NAME);
 
-        // Use BufferedReader to read the file line by line
+        // Use BufferedReader to read the file line by line. Easier to work with in my opinion.
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             String line;
             while ((line = reader.readLine()) != null) {
