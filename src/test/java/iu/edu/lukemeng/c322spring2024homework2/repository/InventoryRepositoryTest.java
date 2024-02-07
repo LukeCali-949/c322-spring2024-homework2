@@ -1,8 +1,5 @@
 package iu.edu.lukemeng.c322spring2024homework2.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import iu.edu.lukemeng.c322spring2024homework2.model.*;
 import org.junit.jupiter.api.Test;
 
