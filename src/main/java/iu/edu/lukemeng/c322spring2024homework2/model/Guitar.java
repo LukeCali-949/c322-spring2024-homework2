@@ -2,15 +2,18 @@ package iu.edu.lukemeng.c322spring2024homework2.model;
 
 public class Guitar {
 
-    String serialNumber;
-    double price;
-    String builder;
-    String model;
-    String type;
-    String backWood;
-    String topWood;
+    private String serialNumber;
+    private String model;
+    private double price;
+    private Builder builder;
+    private Type type;
+    private Wood backWood;
 
-    public Guitar(String serialNumber, double price, String builder, String model, String type, String backWood, String topWood) {
+    private Wood topWood;
+
+    public Guitar(String serialNumber, double price,
+                  Builder builder, String model, Type type,
+                  Wood backWood, Wood topWood) {
         this.serialNumber = serialNumber;
         this.price = price;
         this.builder = builder;
@@ -20,54 +23,29 @@ public class Guitar {
         this.topWood = topWood;
     }
 
-
     public String getSerialNumber() {
         return serialNumber;
-    }
-
-    public String getBackWood() {
-        return backWood;
-    }
-
-    public String getBuilder() {
-        return builder;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getBackwood() {
-        return backWood;
-    }
-
-    public String getTopWood() {
-        return topWood;
     }
 
     public double getPrice() {
         return price;
     }
-
-    public void setPrice(float price) {
-        this.price = price;
+    public void setPrice(float newPrice) {
+        this.price = newPrice;
     }
-
-    @Override
-    public String toString() {
-        return "Guitar{" +
-                "serialNumber='" + serialNumber + '\'' +
-                ", price=" + price +
-                ", builder='" + builder + '\'' +
-                ", model='" + model + '\'' +
-                ", type='" + type + '\'' +
-                ", backWood='" + backWood + '\'' +
-                ", topWood='" + topWood + '\'' +
-                '}';
+    public Builder getBuilder() {
+        return builder;
     }
-
+    public String getModel() {
+        return model;
+    }
+    public Type getType() {
+        return type;
+    }
+    public Wood getBackWood() {
+        return backWood;
+    }
+    public Wood getTopWood() {
+        return topWood;
+    }
 }

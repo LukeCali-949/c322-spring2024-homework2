@@ -2,9 +2,10 @@ package iu.edu.lukemeng.c322spring2024homework2.repository;
 
 
 
-import iu.edu.lukemeng.c322spring2024homework2.model.Guitar;
+import iu.edu.lukemeng.c322spring2024homework2.model.*;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -19,6 +20,7 @@ import java.util.List;
 public class InventoryRepository {
     private static final String NEW_LINE = System.lineSeparator();
     private static final String DATABASE_NAME = "guitars_database.txt";
+    private List<Guitar> guitars = new ArrayList<>();
 
 
 
@@ -28,74 +30,65 @@ public class InventoryRepository {
 
     public boolean addGuitar(Guitar guitarData) throws IOException {
         Path path = Paths.get(DATABASE_NAME);
-        String data = guitarData.getSerialNumber() + "," + guitarData.getPrice() + "," + guitarData.getBuilder() + "," + guitarData.getModel()+ "," + guitarData.getType()+"," + guitarData.getBackWood()+"," + guitarData.getTopWood();
+        String data = guitarData.getSerialNumber() + "," + guitarData.getPrice() + "," + guitarData.getBuilder() + "," + guitarData.getModel() + "," + guitarData.getType().toString() + "," + guitarData.getBackWood() + "," + guitarData.getTopWood();
         appendToFile(path, data + NEW_LINE);
+
+        guitars.add(guitarData);
+
         return true;
     }
 
+
     public Guitar getGuitar(String serialNumber) throws IOException {
-
         Path path = Paths.get(DATABASE_NAME);
-        List<String> data = Files.readAllLines(path);
 
+        // Use BufferedReader to read the file line by line. Easier to work with in my opinion.
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] words = line.split(",");
 
-        for(String line : data){
-            String[] words = line.split(",");
+                if (words.length < 2) {
+                    continue;
+                }
 
-            String strPrice = words[1];
+                if (words[0].equals(serialNumber)) {
+                    double price = Double.parseDouble(words[1]);
+                    Builder builderEnum = Builder.valueOf(words[2].toUpperCase());
+                    String model = words[3];
+                    Type typeEnum = Type.valueOf(words[4].toUpperCase());
+                    Wood backWoodEnum = Wood.valueOf(words[5].toUpperCase());
+                    Wood topWoodEnum = Wood.valueOf(words[6].toUpperCase());
 
-            double price = Double.parseDouble(strPrice);
-
-            if(words[0].equals(serialNumber)){
-                Guitar guitar = new Guitar(words[0], price, words[2], words[3], words[4], words[5], words[6]);
-                return guitar;
+                    return new Guitar(serialNumber, price, builderEnum, model, typeEnum, backWoodEnum, topWoodEnum);
+                }
             }
-
-
         }
+
         return null;
     }
 
-    public List<Guitar> search(Guitar searched) throws IOException {
-        Path path = Paths.get(DATABASE_NAME);
-        List<String> data = Files.readAllLines(path);
+    public List<Guitar> search(Guitar searchGuitar) {
+        List<Guitar> matchingGuitars = new ArrayList<>();
 
-        List<Guitar> result = new ArrayList<>();
+        for (Guitar guitar : guitars) {
 
-        for(String line : data){
-            String[] words = line.split(",");
-
-            String strPrice = words[1];
-
-            double price = Double.parseDouble(strPrice);
-
-            Guitar guitar = new Guitar(words[0], price, words[2], words[3], words[4], words[5], words[6]);
-
-            String builder = guitar.getBuilder();
-            if ((builder != null) && (!builder.isEmpty()) &&
-                    (!builder.equals(guitar.getBuilder())))
+            if (searchGuitar.getBuilder() != guitar.getBuilder())
                 continue;
-            String model = guitar.getModel();
-            if ((model != null) && (!model.isEmpty()) &&
-                    (!model.equals(guitar.getModel())))
-                continue;
-            String type = guitar.getType();
-            if ((type != null) && (!type.isEmpty()) &&
-                    (!type.equals(guitar.getType())))
-                continue;
-            String backWood = guitar.getBackWood();
-            if ((backWood != null) && (!backWood.isEmpty()) &&
-                    (!backWood.equals(guitar.getBackWood())))
-                continue;
-            String topWood = guitar.getTopWood();
-            if ((topWood != null) && (!topWood.isEmpty()) &&
-                    (!topWood.equals(guitar.getTopWood())))
-                continue;
-            result.add(guitar);
 
+            if (searchGuitar.getType() != guitar.getType())
+                continue;
+
+            if (searchGuitar.getBackWood() != guitar.getBackWood())
+                continue;
+
+            if (searchGuitar.getTopWood() != guitar.getTopWood())
+                continue;
+
+            matchingGuitars.add(guitar);
         }
 
-        return result;
+        return matchingGuitars;
     }
 
 
