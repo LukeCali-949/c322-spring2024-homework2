@@ -22,7 +22,19 @@ public class InventoryRepository {
     private static final String DATABASE_NAME = "guitars_database.txt";
     private List<Guitar> guitars = new ArrayList<>();
 
+    public InventoryRepository() {
+        clearDatabaseFile();
+    }
 
+    private void clearDatabaseFile() {
+        Path path = Paths.get(DATABASE_NAME);
+        try {
+            Files.deleteIfExists(path);
+            Files.createFile(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static void appendToFile(Path path, String content) throws IOException {
         Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
@@ -31,6 +43,7 @@ public class InventoryRepository {
     public boolean addGuitar(Guitar guitarData) throws IOException {
         Path path = Paths.get(DATABASE_NAME);
         String data = guitarData.getSerialNumber() + "," + guitarData.getPrice() + "," + guitarData.getBuilder() + "," + guitarData.getModel() + "," + guitarData.getType().toString() + "," + guitarData.getBackWood() + "," + guitarData.getTopWood();
+        System.out.println(data);
         appendToFile(path, data + NEW_LINE);
 
         guitars.add(guitarData);
@@ -69,9 +82,14 @@ public class InventoryRepository {
     }
 
     public List<Guitar> search(Guitar searchGuitar) {
+        System.out.println("ran here too");
         List<Guitar> matchingGuitars = new ArrayList<>();
 
+
         for (Guitar guitar : guitars) {
+            System.out.println(guitar);
+            System.out.println("----------");
+            System.out.println(searchGuitar);
 
             if (searchGuitar.getBuilder() != guitar.getBuilder())
                 continue;
