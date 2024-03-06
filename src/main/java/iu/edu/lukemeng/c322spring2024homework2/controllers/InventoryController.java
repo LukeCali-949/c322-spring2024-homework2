@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "https://c322-spring2024-homework2-latest-6n96.onrender.com/")
 public class InventoryController {
 
     private InventoryRepository inventoryRepository;
